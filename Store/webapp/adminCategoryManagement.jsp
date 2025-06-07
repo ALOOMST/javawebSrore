@@ -1,0 +1,538 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.util.List" %>
+<%@ page import="bean.Product" %>
+<%@ page import="service.ProductService" %>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>类别管理</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Tailwind 配置 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#165DFF',
+                        category: {
+                            luxury: '#F59E0B',
+                            digital: '#3B82F6',
+                            phone: '#10B981',
+                            tablet: '#8B5CF6',
+                            wristband: '#EC4899',
+                            computer: '#6366F1'
+                        },
+                        neutral: {
+                            100: '#F9FAFB',
+                            200: '#F3F4F6',
+                            300: '#E5E7EB',
+                            400: '#D1D5DB',
+                            500: '#9CA3AF',
+                            600: '#6B7280',
+                            700: '#4B5563',
+                            800: '#1F2937',
+                            900: '#111827'
+                        }
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <!-- 自定义工具类 -->
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .card-shadow {
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            }
+            .btn-hover {
+                @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5;
+            }
+            .table-hover {
+                @apply transition-all duration-200 hover:bg-neutral-100;
+            }
+            .category-badge {
+                @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+            }
+        }
+    </style>
+</head>
+<body class="font-inter bg-neutral-100 text-neutral-800 min-h-screen flex flex-col">
+    <!-- 顶部导航 -->
+    <header class="bg-white shadow-md sticky top-0 z-10">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fa fa-sitemap text-primary text-2xl"></i>
+                <h1 class="text-xl font-bold text-neutral-800">类别管理系统</h1>
+            </div>
+            <nav class="hidden md:flex space-x-6">
+                <a href="<%= request.getContextPath() %>/index.jsp" class="text-neutral-600 hover:text-primary transition-colors duration-200">
+                    <i class="fa fa-home mr-1"></i> 首页
+                </a>
+                <a href="<%= request.getContextPath() %>/adminCategoryManagement.jsp" class="text-primary font-medium">
+                    <i class="fa fa-tags mr-1"></i> 类别管理
+                </a>
+                <a href="<%= request.getContextPath() %>/admin.jsp" class="text-neutral-600 hover:text-primary transition-colors duration-200">
+                    <i class="fa fa-cubes mr-1"></i> 商品管理
+                </a>
+                <a href="<%= request.getContextPath() %>/adminUserManagement.jsp" class="text-neutral-600 hover:text-primary transition-colors duration-200">
+                    <i class="fa fa-user mr-1"></i> 账户设置
+                </a>
+            </nav>
+            <button class="md:hidden text-neutral-700">
+                <i class="fa fa-bars text-xl"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- 主内容区 -->
+    <main class="flex-grow container mx-auto px-4 py-6">
+        <!-- 搜索和筛选 -->
+        <section class="mb-8">
+            <div class="bg-white rounded-xl p-6 card-shadow">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0">
+                    <h2 class="text-2xl font-bold text-neutral-800 flex items-center">
+                        <i class="fa fa-tags text-primary mr-2"></i> 商品类别管理
+                    </h2>
+                    <div class="flex flex-wrap gap-3 w-full md:w-auto">
+                        <div class="flex flex-wrap gap-3 w-full md:w-auto">
+	                        <div class="relative flex-grow md:flex-grow-0 flex">
+		                        <input type="text" placeholder="搜索商品..." 
+		                        class="flex-grow pl-10 pr-4 py-2 border border-neutral-300 rounded-l-lg focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all">
+		                        <button type="button" class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-r-lg transition-all flex items-center">
+		                        	<i class="fa fa-search mr-2"></i>
+		                        	<span>搜索</span>
+		                        </button>
+		                        <i class="fa fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400"></i>
+	                        </div>
+                        </div>
+                    <div class="flex flex-wrap gap-3">
+                    	<a href="<%= request.getContextPath() %>/naifenSeries.jsp" 
+                    	class="px-4 py-2 bg-category-digital/10 text-category-digital border border-category-digital/30 rounded-lg hover:bg-category-digital/20 transition-all flex items-center">
+	                    	<i class="fa fa-laptop mr-2"></i>
+	                    	<span>奶粉辅食</span>
+                    	</a>
+    
+    <a href="<%= request.getContextPath() %>/zhiniaokuSeries.jsp" 
+       class="px-4 py-2 bg-category-tablet/10 text-category-tablet border border-category-tablet/30 rounded-lg hover:bg-category-tablet/20 transition-all flex items-center">
+        <i class="fa fa-tablet mr-2"></i>
+        <span>纸尿裤</span>
+    </a>
+    
+    <a href="<%= request.getContextPath() %>/weiyangSeries.jsp" 
+       class="px-4 py-2 bg-category-wristband/10 text-category-wristband border border-category-wristband/30 rounded-lg hover:bg-category-wristband/20 transition-all flex items-center">
+        <i class="fa fa-clock-o mr-2"></i>
+        <span>喂养洗护</span>
+    </a>
+    
+    <a href="<%= request.getContextPath() %>/wanjuSeries.jsp" 
+       class="px-4 py-2 bg-category-computer/10 text-category-computer border border-category-computer/30 rounded-lg hover:bg-category-computer/20 transition-all flex items-center">
+        <i class="fa fa-desktop mr-2"></i>
+        <span>儿童玩具</span>
+    </a>
+</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 商品列表 -->
+        <section class="mb-8">
+            <div class="bg-white rounded-xl p-6 card-shadow">
+                <h2 class="text-xl font-bold text-neutral-800 mb-4 flex items-center">
+                    <i class="fa fa-list-alt text-primary mr-2"></i> 所有商品
+                </h2>
+                
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-neutral-200">
+                        <thead class="bg-neutral-100">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">
+                                    商品信息
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">
+                                    价格
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">
+                                    库存
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">
+                                    图片
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">
+                                    描述
+                                </th>
+                                <!-- <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-neutral-600 uppercase tracking-wider">
+                                   分类操作
+                                </th> -->
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-neutral-200">
+                            <%
+                                ProductService productService = new ProductService();
+                                List<Product> productList = productService.getAllProducts();
+                                if (productList != null && !productList.isEmpty()) {
+                                    for (Product product : productList) {
+                            %>
+                            <tr class="table-hover">
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="font-medium text-neutral-900"><%= product.getProductName() %></div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-neutral-900">¥<%= product.getPrice() %></div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-neutral-900"><%= product.getStock() %></div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <img src="<%= "images/" + product.getImagepath() %>" 
+                                            alt="<%= product.getProductName() %>" class="h-10 w-10 rounded-full object-cover">
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 max-w-xs">
+                                    <div class="text-sm text-neutral-600 truncate"><%= product.getDescrition() %></div>
+                                </td>
+                                <%-- <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                    <div class="flex flex-wrap justify-end gap-2">              
+                                        <a href="CategoryServlet?action=adddigitalSeries&productId=<%= product.getProductId() %>" 
+                                            class="category-badge bg-category-digital/10 text-category-digital">
+                                            <i class="fa fa-laptop mr-1"></i> 奶粉辅食
+                                        </a>
+                                        <a href="CategoryServlet?action=addtabletSeries&productId=<%= product.getProductId() %>" 
+                                            class="category-badge bg-category-tablet/10 text-category-tablet">
+                                            <i class="fa fa-tablet mr-1"></i> 纸尿裤
+                                        </a>
+                                        <a href="CategoryServlet?action=addwrisrbandSeries&productId=<%= product.getProductId() %>" 
+                                            class="category-badge bg-category-wristband/10 text-category-wristband">
+                                            <i class="fa fa-clock-o mr-1"></i> 喂养洗护
+                                        </a>
+                                        <a href="CategoryServlet?action=addcomputerSeries&productId=<%= product.getProductId() %>" 
+                                            class="category-badge bg-category-computer/10 text-category-computer">
+                                            <i class="fa fa-desktop mr-1"></i> 儿童玩具
+                                        </a>
+                                    </div>
+                                </td> --%>
+                            </tr>
+                            <%
+                                    }
+                                }
+                            %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <%-- <!-- 分类商品展示 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <section>
+                <div class="bg-white rounded-xl p-6 card-shadow border-l-4 border-category-digital">
+                    <h2 class="text-xl font-bold text-neutral-800 mb-4 flex items-center">
+                        <i class="fa fa-laptop text-category-digital mr-2"></i> 奶粉辅食
+                    </h2>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-neutral-200">
+                            <thead class="bg-neutral-100">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">
+                                        商品名称
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">
+                                        价格
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">
+                                        库存
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-neutral-600 uppercase tracking-wider">
+                                        操作
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-neutral-200">
+                                <%
+                                    List<Product> digitalSeriesProducts = productService.getdigitalSeriesProducts();
+                                    if (digitalSeriesProducts != null && !digitalSeriesProducts.isEmpty()) {
+                                        for (Product product : digitalSeriesProducts) {
+                                %>
+                                <tr class="table-hover">
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="font-medium text-neutral-900 flex items-center">
+                                            <%= product.getProductName() %>
+                                            <span class="ml-2 category-badge bg-category-digital/10 text-category-digital">
+                                                <i class="fa fa-laptop mr-1"></i> 奶粉辅食
+                                            </span>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-neutral-900">¥<%= product.getPrice() %></div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-neutral-900"><%= product.getStock() %></div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                        <a href="CategoryServlet?action=removedigitalSeries&productId=<%= product.getProductId() %>" 
+                                            class="text-danger hover:text-danger/80">
+                                            <i class="fa fa-times-circle mr-1"></i> 移出
+                                        </a>
+                                    </td>
+                                </tr>
+                                <%
+                                        }
+                                    }
+                                %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <div class="bg-white rounded-xl p-6 card-shadow border-l-4 border-category-tablet">
+                    <h2 class="text-xl font-bold text-neutral-800 mb-4 flex items-center">
+                        <i class="fa fa-tablet text-category-tablet mr-2"></i> 纸尿裤
+                    </h2>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-neutral-200">
+                            <thead class="bg-neutral-100">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">
+                                        商品名称
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">
+                                        价格
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">
+                                        库存
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-neutral-600 uppercase tracking-wider">
+                                        操作
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-neutral-200">
+                                <%
+                                    List<Product> tabletSeriesProducts = productService.gettabletSeriesProducts();
+                                    if (tabletSeriesProducts != null && !tabletSeriesProducts.isEmpty()) {
+                                        for (Product product : tabletSeriesProducts) {
+                                %>
+                                <tr class="table-hover">
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="font-medium text-neutral-900 flex items-center">
+                                            <%= product.getProductName() %>
+                                            <span class="ml-2 category-badge bg-category-tablet/10 text-category-tablet">
+                                                <i class="fa fa-tablet mr-1"></i> 纸尿裤
+                                            </span>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-neutral-900">¥<%= product.getPrice() %></div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-neutral-900"><%= product.getStock() %></div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                        <a href="CategoryServlet?action=removetabletSeries&productId=<%= product.getProductId() %>" 
+                                            class="text-danger hover:text-danger/80">
+                                            <i class="fa fa-times-circle mr-1"></i> 移出
+                                        </a>
+                                    </td>
+                                </tr>
+                                <%
+                                        }
+                                    }
+                                %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <div class="bg-white rounded-xl p-6 card-shadow border-l-4 border-category-wristband">
+                    <h2 class="text-xl font-bold text-neutral-800 mb-4 flex items-center">
+                        <i class="fa fa-clock-o text-category-wristband mr-2"></i> 喂养洗护
+                    </h2>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-neutral-200">
+                            <thead class="bg-neutral-100">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">
+                                        商品名称
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">
+                                        价格
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">
+                                        库存
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-neutral-600 uppercase tracking-wider">
+                                        操作
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-neutral-200">
+                                <%
+                                    List<Product> wrisrbandSeriesProducts = productService.getwrisrbandSeriesProducts();
+                                    if (wrisrbandSeriesProducts != null && !wrisrbandSeriesProducts.isEmpty()) {
+                                        for (Product product : wrisrbandSeriesProducts) {
+                                %>
+                                <tr class="table-hover">
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="font-medium text-neutral-900 flex items-center">
+                                            <%= product.getProductName() %>
+                                            <span class="ml-2 category-badge bg-category-wristband/10 text-category-wristband">
+                                                <i class="fa fa-clock-o mr-1"></i> 喂养洗护
+                                            </span>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-neutral-900">¥<%= product.getPrice() %></div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-neutral-900"><%= product.getStock() %></div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                        <a href="CategoryServlet?action=removewrisrbandSeries&productId=<%= product.getProductId() %>" 
+                                            class="text-danger hover:text-danger/80">
+                                            <i class="fa fa-times-circle mr-1"></i> 移出
+                                        </a>
+                                    </td>
+                                </tr>
+                                <%
+                                        }
+                                    }
+                                %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <div class="bg-white rounded-xl p-6 card-shadow border-l-4 border-category-computer">
+                    <h2 class="text-xl font-bold text-neutral-800 mb-4 flex items-center">
+                        <i class="fa fa-desktop text-category-computer mr-2"></i> 儿童玩具
+                    </h2>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-neutral-200">
+                            <thead class="bg-neutral-100">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">
+                                        商品名称
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">
+                                        价格
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">
+                                        库存
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-neutral-600 uppercase tracking-wider">
+                                        操作
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-neutral-200">
+                                <%
+                                    List<Product> computerSeriesProducts = productService.getcomputerSeriesProducts();
+                                    if (computerSeriesProducts != null && !computerSeriesProducts.isEmpty()) {
+                                        for (Product product : computerSeriesProducts) {
+                                %>
+                                <tr class="table-hover">
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="font-medium text-neutral-900 flex items-center">
+                                            <%= product.getProductName() %>
+                                            <span class="ml-2 category-badge bg-category-computer/10 text-category-computer">
+                                                <i class="fa fa-desktop mr-1"></i> 儿童玩具
+                                            </span>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-neutral-900">¥<%= product.getPrice() %></div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-neutral-900"><%= product.getStock() %></div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                        <a href="CategoryServlet?action=removecomputerSeries&productId=<%= product.getProductId() %>" 
+                                            class="text-danger hover:text-danger/80">
+                                            <i class="fa fa-times-circle mr-1"></i> 移出
+                                        </a>
+                                    </td>
+                                </tr>
+                                <%
+                                        }
+                                    }
+                                %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </div> --%>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-white border-t border-neutral-200 mt-8">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="text-neutral-600 text-sm mb-4 md:mb-0">
+                    © 2025 类别管理系统 - 版权所有
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-neutral-500 hover:text-primary transition-colors duration-200">
+                        <i class="fa fa-question-circle mr-1"></i> 帮助中心
+                    </a>
+                    <a href="#" class="text-neutral-500 hover:text-primary transition-colors duration-200">
+                        <i class="fa fa-file-text-o mr-1"></i> 使用条款
+                    </a>
+                    <a href="#" class="text-neutral-500 hover:text-primary transition-colors duration-200">
+                        <i class="fa fa-shield mr-1"></i> 隐私政策
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 全局交互脚本 -->
+    <script>
+        // 表格行悬停效果已通过CSS实现
+        
+        // 模拟异步操作提示
+        document.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                // 如果是删除操作，添加确认提示
+                if (this.href.includes('remove')) {
+                    if (!confirm('确定要将此商品移出该分类吗？')) {
+                        e.preventDefault();
+                    }
+                }
+                // 模拟加载状态
+                if (!e.defaultPrevented) {
+                    const originalText = this.innerHTML;
+                    this.innerHTML = '<i class="fa fa-spinner fa-spin mr-1"></i> 处理中...';
+                    this.classList.add('opacity-70', 'cursor-wait');
+                    this.disabled = true;
+                    
+                    // 2秒后恢复原状
+                    setTimeout(() => {
+                        this.innerHTML = originalText;
+                        this.classList.remove('opacity-70', 'cursor-wait');
+                        this.disabled = false;
+                    }, 2000);
+                }
+            });
+        });
+    </script>
+</body>
+</html>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
