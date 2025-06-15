@@ -79,14 +79,14 @@
                 if (product != null) {
                     total += product.getPrice() * cartItem.getQuantity();
                 } else {
-                    // 处理产品信息不可用的情况
+                    
                 }
             }        
             
             String userId = String.valueOf(session.getAttribute("userId")) ;
-            String orderDate = new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date());
-            String orderStatus = "Pending";
-            String shippingAddress = ""; // 假设有一个默认的收货地址
+            String orderDate = new java.text.SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(new java.util.Date());
+            String orderStatus = "已提交";
+            String shippingAddress = "默认地址"; 
 
             Order order = new Order(userId, orderDate, String.valueOf(total), orderStatus, shippingAddress);
             orderService.addOrder(order);
@@ -118,7 +118,7 @@
         </table>
         <p class="total">总计：￥<%= total %></p>
         <p>谢谢您的购买，欢迎下次光临！</p>
-        <form action="index.jsp" method="get">
+        <form action="adminOrderManagement.jsp" method="get">
             <input type="submit" value="确定">
         </form>
     </div>

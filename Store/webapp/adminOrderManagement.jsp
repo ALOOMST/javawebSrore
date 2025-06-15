@@ -151,9 +151,7 @@
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#ORD-<%= order.getOrderid() %></td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="flex items-center">
-                                    <div class="flex-shrink-0 h-10 w-10">
-                                        <img class="h-10 w-10 rounded-full object-cover" src="https://picsum.photos/id/<%= 1000 + order.getUserid() %>/200/200" alt="用户头像">
-                                    </div>
+                                    
                                     <div class="ml-4">
                                         <div class="text-sm font-medium text-gray-900">用户 #<%= order.getUserid() %></div>
                                     </div>
@@ -168,12 +166,7 @@
                             </td>
                             <td class="px-6 py-4 text-sm text-gray-500 truncate max-w-xs"><%= order.getShippingaddress() %></td>
                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                <a href="OrderServlet?action=view&orderId=<%= order.getOrderid() %>" class="text-primary hover:text-primary/80 mr-3 btn-effect">
-                                    <i class="fa-solid fa-eye mr-1"></i> 查看
-                                </a>
-                                <a href="OrderServlet?action=update&orderId=<%= order.getOrderid() %>" class="text-secondary hover:text-secondary/80 mr-3 btn-effect">
-                                    <i class="fa-solid fa-pencil mr-1"></i> 更新
-                                </a>
+                        
                                 <a href="OrderServlet?action=delete&orderId=<%= order.getOrderid() %>" class="text-danger hover:text-danger/80 btn-effect">
                                     <i class="fa-solid fa-trash mr-1"></i> 删除
                                 </a>

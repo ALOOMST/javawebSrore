@@ -44,40 +44,40 @@ import utils.C3pConnection;
 public class OrderDao {
     public List<Order> getAllOrders() throws SQLException {
         QueryRunner r = new QueryRunner(C3pConnection.getDataSource());
-        String sql = "SELECT * FROM Order";
+        String sql = "SELECT * FROM Orders";
         return r.query(sql, new BeanListHandler<>(Order.class));
     }
 
     public boolean addOrder(Order order) throws SQLException {
         QueryRunner r = new QueryRunner(C3pConnection.getDataSource());
-        String sql = "INSERT INTO Order (userid, orderdate, totalamount, orderstatus, shippingaddress) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Orders (userid, orderdate, totalamount, orderstatus, shippingaddress) VALUES (?, ?, ?, ?, ?)";
         int i = r.update(sql, order.getUserid(), order.getOrderdate(), order.getTotalamount(), order.getOrderstatus(), order.getShippingaddress());
         return i > 0;
     }
 
     public Order getOrderById(int orderId) throws SQLException {
         QueryRunner r = new QueryRunner(C3pConnection.getDataSource());
-        String sql = "SELECT * FROM Order WHERE orderid=?";
+        String sql = "SELECT * FROM Orders WHERE orderid=?";
         return r.query(sql, new BeanHandler<>(Order.class), orderId);
     }
 
     public boolean updateOrder(Order order) throws SQLException {
         QueryRunner r = new QueryRunner(C3pConnection.getDataSource());
-        String sql = "UPDATE Order SET orderstatus=?, shippingaddress=? WHERE orderid=?";
+        String sql = "UPDATE Orders SET orderstatus=?, shippingaddress=? WHERE orderid=?";
         int i = r.update(sql, order.getOrderstatus(), order.getShippingaddress(), order.getOrderid());
         return i > 0;
     }
 
     public boolean deleteOrder(int orderId) throws SQLException {
         QueryRunner r = new QueryRunner(C3pConnection.getDataSource());
-        String sql = "DELETE FROM Order WHERE orderid=?";
+        String sql = "DELETE FROM Orders WHERE orderid=?";
         int i = r.update(sql, orderId);
         return i > 0;
     }
 
     public List<Order> getOrdersByUserId(int userId) throws SQLException {
         QueryRunner r = new QueryRunner(C3pConnection.getDataSource());
-        String sql = "SELECT * FROM Order WHERE userid=?";
+        String sql = "SELECT * FROM Orders WHERE userid=?";
         return r.query(sql, new BeanListHandler<>(Order.class), userId);
     }
 }

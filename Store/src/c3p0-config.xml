@@ -4,6 +4,6 @@
 		<property name="driverClass">com.mysql.cj.jdbc.Driver</property>
 		<property name="jdbcUrl">jdbc:mysql://localhost:3306/user?serverTimezone=Asia/Shanghai&amp;useUnicode=true&amp;characterEncoding=utf-8</property>
 		<property name="user">root</property>
-		<property name="password">mysql2020</property>
+		<property name="password">root</property>
 	</default-config>
 </c3p0-config>

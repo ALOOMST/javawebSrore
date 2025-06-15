@@ -85,6 +85,9 @@
                 <a href="<%= request.getContextPath() %>/admin.jsp" class="text-neutral-600 hover:text-primary transition-colors duration-200">
                     <i class="fa fa-cubes mr-1"></i> 商品管理
                 </a>
+                                <a href="<%= request.getContextPath() %>/adminOrderManagement.jsp" class="text-neutral-600 hover:text-primary transition-colors duration-200">
+                    <i class="fa fa-user mr-1"></i> 订单管理
+                </a>
                 <a href="<%= request.getContextPath() %>/adminUserManagement.jsp" class="text-neutral-600 hover:text-primary transition-colors duration-200">
                     <i class="fa fa-user mr-1"></i> 账户设置
                 </a>
@@ -172,9 +175,6 @@
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">
                                     描述
                                 </th>
-                                <!-- <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-neutral-600 uppercase tracking-wider">
-                                   分类操作
-                                </th> -->
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-neutral-200">
@@ -203,26 +203,7 @@
                                 <td class="px-6 py-4 max-w-xs">
                                     <div class="text-sm text-neutral-600 truncate"><%= product.getDescrition() %></div>
                                 </td>
-                                <%-- <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                    <div class="flex flex-wrap justify-end gap-2">              
-                                        <a href="CategoryServlet?action=adddigitalSeries&productId=<%= product.getProductId() %>" 
-                                            class="category-badge bg-category-digital/10 text-category-digital">
-                                            <i class="fa fa-laptop mr-1"></i> 奶粉辅食
-                                        </a>
-                                        <a href="CategoryServlet?action=addtabletSeries&productId=<%= product.getProductId() %>" 
-                                            class="category-badge bg-category-tablet/10 text-category-tablet">
-                                            <i class="fa fa-tablet mr-1"></i> 纸尿裤
-                                        </a>
-                                        <a href="CategoryServlet?action=addwrisrbandSeries&productId=<%= product.getProductId() %>" 
-                                            class="category-badge bg-category-wristband/10 text-category-wristband">
-                                            <i class="fa fa-clock-o mr-1"></i> 喂养洗护
-                                        </a>
-                                        <a href="CategoryServlet?action=addcomputerSeries&productId=<%= product.getProductId() %>" 
-                                            class="category-badge bg-category-computer/10 text-category-computer">
-                                            <i class="fa fa-desktop mr-1"></i> 儿童玩具
-                                        </a>
-                                    </div>
-                                </td> --%>
+
                             </tr>
                             <%
                                     }
@@ -234,252 +215,7 @@
             </div>
         </section>
 
-        <%-- <!-- 分类商品展示 -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <section>
-                <div class="bg-white rounded-xl p-6 card-shadow border-l-4 border-category-digital">
-                    <h2 class="text-xl font-bold text-neutral-800 mb-4 flex items-center">
-                        <i class="fa fa-laptop text-category-digital mr-2"></i> 奶粉辅食
-                    </h2>
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-neutral-200">
-                            <thead class="bg-neutral-100">
-                                <tr>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">
-                                        商品名称
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">
-                                        价格
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">
-                                        库存
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-neutral-600 uppercase tracking-wider">
-                                        操作
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody class="bg-white divide-y divide-neutral-200">
-                                <%
-                                    List<Product> digitalSeriesProducts = productService.getdigitalSeriesProducts();
-                                    if (digitalSeriesProducts != null && !digitalSeriesProducts.isEmpty()) {
-                                        for (Product product : digitalSeriesProducts) {
-                                %>
-                                <tr class="table-hover">
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="font-medium text-neutral-900 flex items-center">
-                                            <%= product.getProductName() %>
-                                            <span class="ml-2 category-badge bg-category-digital/10 text-category-digital">
-                                                <i class="fa fa-laptop mr-1"></i> 奶粉辅食
-                                            </span>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-neutral-900">¥<%= product.getPrice() %></div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-neutral-900"><%= product.getStock() %></div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <a href="CategoryServlet?action=removedigitalSeries&productId=<%= product.getProductId() %>" 
-                                            class="text-danger hover:text-danger/80">
-                                            <i class="fa fa-times-circle mr-1"></i> 移出
-                                        </a>
-                                    </td>
-                                </tr>
-                                <%
-                                        }
-                                    }
-                                %>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </section>
-
-            <section>
-                <div class="bg-white rounded-xl p-6 card-shadow border-l-4 border-category-tablet">
-                    <h2 class="text-xl font-bold text-neutral-800 mb-4 flex items-center">
-                        <i class="fa fa-tablet text-category-tablet mr-2"></i> 纸尿裤
-                    </h2>
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-neutral-200">
-                            <thead class="bg-neutral-100">
-                                <tr>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">
-                                        商品名称
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">
-                                        价格
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">
-                                        库存
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-neutral-600 uppercase tracking-wider">
-                                        操作
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody class="bg-white divide-y divide-neutral-200">
-                                <%
-                                    List<Product> tabletSeriesProducts = productService.gettabletSeriesProducts();
-                                    if (tabletSeriesProducts != null && !tabletSeriesProducts.isEmpty()) {
-                                        for (Product product : tabletSeriesProducts) {
-                                %>
-                                <tr class="table-hover">
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="font-medium text-neutral-900 flex items-center">
-                                            <%= product.getProductName() %>
-                                            <span class="ml-2 category-badge bg-category-tablet/10 text-category-tablet">
-                                                <i class="fa fa-tablet mr-1"></i> 纸尿裤
-                                            </span>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-neutral-900">¥<%= product.getPrice() %></div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-neutral-900"><%= product.getStock() %></div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <a href="CategoryServlet?action=removetabletSeries&productId=<%= product.getProductId() %>" 
-                                            class="text-danger hover:text-danger/80">
-                                            <i class="fa fa-times-circle mr-1"></i> 移出
-                                        </a>
-                                    </td>
-                                </tr>
-                                <%
-                                        }
-                                    }
-                                %>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </section>
-
-            <section>
-                <div class="bg-white rounded-xl p-6 card-shadow border-l-4 border-category-wristband">
-                    <h2 class="text-xl font-bold text-neutral-800 mb-4 flex items-center">
-                        <i class="fa fa-clock-o text-category-wristband mr-2"></i> 喂养洗护
-                    </h2>
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-neutral-200">
-                            <thead class="bg-neutral-100">
-                                <tr>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">
-                                        商品名称
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">
-                                        价格
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">
-                                        库存
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-neutral-600 uppercase tracking-wider">
-                                        操作
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody class="bg-white divide-y divide-neutral-200">
-                                <%
-                                    List<Product> wrisrbandSeriesProducts = productService.getwrisrbandSeriesProducts();
-                                    if (wrisrbandSeriesProducts != null && !wrisrbandSeriesProducts.isEmpty()) {
-                                        for (Product product : wrisrbandSeriesProducts) {
-                                %>
-                                <tr class="table-hover">
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="font-medium text-neutral-900 flex items-center">
-                                            <%= product.getProductName() %>
-                                            <span class="ml-2 category-badge bg-category-wristband/10 text-category-wristband">
-                                                <i class="fa fa-clock-o mr-1"></i> 喂养洗护
-                                            </span>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-neutral-900">¥<%= product.getPrice() %></div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-neutral-900"><%= product.getStock() %></div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <a href="CategoryServlet?action=removewrisrbandSeries&productId=<%= product.getProductId() %>" 
-                                            class="text-danger hover:text-danger/80">
-                                            <i class="fa fa-times-circle mr-1"></i> 移出
-                                        </a>
-                                    </td>
-                                </tr>
-                                <%
-                                        }
-                                    }
-                                %>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </section>
-
-            <section>
-                <div class="bg-white rounded-xl p-6 card-shadow border-l-4 border-category-computer">
-                    <h2 class="text-xl font-bold text-neutral-800 mb-4 flex items-center">
-                        <i class="fa fa-desktop text-category-computer mr-2"></i> 儿童玩具
-                    </h2>
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-neutral-200">
-                            <thead class="bg-neutral-100">
-                                <tr>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">
-                                        商品名称
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">
-                                        价格
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">
-                                        库存
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-neutral-600 uppercase tracking-wider">
-                                        操作
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody class="bg-white divide-y divide-neutral-200">
-                                <%
-                                    List<Product> computerSeriesProducts = productService.getcomputerSeriesProducts();
-                                    if (computerSeriesProducts != null && !computerSeriesProducts.isEmpty()) {
-                                        for (Product product : computerSeriesProducts) {
-                                %>
-                                <tr class="table-hover">
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="font-medium text-neutral-900 flex items-center">
-                                            <%= product.getProductName() %>
-                                            <span class="ml-2 category-badge bg-category-computer/10 text-category-computer">
-                                                <i class="fa fa-desktop mr-1"></i> 儿童玩具
-                                            </span>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-neutral-900">¥<%= product.getPrice() %></div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-neutral-900"><%= product.getStock() %></div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <a href="CategoryServlet?action=removecomputerSeries&productId=<%= product.getProductId() %>" 
-                                            class="text-danger hover:text-danger/80">
-                                            <i class="fa fa-times-circle mr-1"></i> 移出
-                                        </a>
-                                    </td>
-                                </tr>
-                                <%
-                                        }
-                                    }
-                                %>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </section>
-        </div> --%>
+      
     </main>
 
     <!-- 页脚 -->
